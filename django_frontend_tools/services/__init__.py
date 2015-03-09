@@ -6,19 +6,23 @@ from django.utils import six
 from django.conf import settings
 from django_node.base_service import BaseService
 from django_node.exceptions import NodeServiceError
+from ..settings import CACHE_AUTOPREFIXER, CACHE_LESS, CACHE_COMPRESSED_CSS, CACHE_COMPRESSED_JS
 from ..exceptions import (
     MissingArgumentError, AutoprefixerError, LessCompileError, CSSCompressionError, JSCompressionError
 )
 
 
 class CachedService(BaseService):
+    CACHE = True
+
     def generate_cache_key(self, serialized_data, data):
-        if not settings.DEBUG:
+        if self.CACHE:
             return hashlib.sha256(serialized_data).hexdigest()
 
 
 class AutoprefixerService(CachedService):
     path_to_source = os.path.join(os.path.dirname(__file__), 'autoprefixer.js')
+    CACHE = CACHE_AUTOPREFIXER
 
     def autoprefix(self, css, options=None):
         params = {
@@ -38,6 +42,7 @@ class AutoprefixerService(CachedService):
 
 class LessService(CachedService):
     path_to_source = os.path.join(os.path.dirname(__file__), 'less.js')
+    CACHE = CACHE_LESS
 
     def compile(self, path_to_file, options=None):
         params = {
@@ -57,6 +62,7 @@ class LessService(CachedService):
 
 class CompressCSSService(CachedService):
     path_to_source = os.path.join(os.path.dirname(__file__), 'compress_css.js')
+    CACHE = CACHE_COMPRESSED_CSS
 
     def compress(self, css, path_to_file=None, options=None, prepend_to_relative_urls=None):
         params = {}
@@ -84,6 +90,7 @@ class CompressCSSService(CachedService):
 
 class CompressJSService(CachedService):
     path_to_source = os.path.join(os.path.dirname(__file__), 'compress_js.js')
+    CACHE = CACHE_COMPRESSED_JS
 
     def compress(self, js, path_to_file=None, options=None):
         params = {}
