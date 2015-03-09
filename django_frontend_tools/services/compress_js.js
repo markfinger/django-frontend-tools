@@ -2,7 +2,6 @@ var fs = require('fs');
 var UglifyJS = require('uglify-js');
 
 var service = function(data, response) {
-	console.log('in js service')
 	var js = data.js;
 
 	var options = data.options;

@@ -2,7 +2,6 @@ var fs = require('fs');
 var less = require('less');
 
 var service = function(data, response) {
-	console.log('start in less ')
 	var pathToFile = data.path_to_file;
 
 	if (!fs.existsSync(pathToFile)) {
@@ -29,16 +28,12 @@ var service = function(data, response) {
 			// output.css = string of css
 			// output.map = string of sourcemap
 			// output.imports = array of string filenames of the imports referenced
-			console.log('success in less')
 			response.send(output.css);
 		},
 		function(error) {
-			console.log('error in less')
 			response.status(500).send(error);
 			console.error(new Error(error));
 		});
-
-	console.log('end in less')
 };
 
 module.exports = service;
