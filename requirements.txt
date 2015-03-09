@@ -1,2 +1,3 @@
 django
 django-compressor==1.4
+-e git+https://github.com/markfinger/django-node.git@a360a6f497af33761ebfb012dc51877769e72789#egg=django-node
