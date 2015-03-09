@@ -1,9 +1,9 @@
 var autoprefixer = require('autoprefixer');
 
-var service = function(req, res) {
-	var css = req.query.css;
+var service = function(data, response) {
+	var css = data.css;
 
-	var options = req.query['options'];
+	var options = data['options'];
 	if (options) {
 		options = JSON.parse(options);
 	}
@@ -11,12 +11,12 @@ var service = function(req, res) {
 	try {
 		var output = autoprefixer(options).process(css).css;
 	} catch(err) {
-		res.status(500).send(e);
+		response.status(500).send(e);
 		console.error(new Error(err));
 		return;
 	}
 
-	res.send(output);
+	response.send(output);
 };
 
 module.exports = service;

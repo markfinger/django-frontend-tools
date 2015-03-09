@@ -3,8 +3,9 @@ from urlparse import urljoin
 from django import template
 from django.contrib.staticfiles import finders
 from django.conf import settings
-from django_frontend_tools.transforms import autoprefixer, less, version_file_name
-from django_frontend_tools.exceptions import MissingTemplateTagArgument, CannotFindFile
+from ..transforms import autoprefixer, less
+from ..utils import version_file_name
+from ..exceptions import MissingTemplateTagArgument, CannotFindFile
 
 register = template.Library()
 
@@ -64,8 +65,6 @@ class FrontendToolsNode(template.Node):
         return self.transforms + (self.path_to_asset,)
 
     def render(self, context):
-        # If cached: return cache
-
         transformed = {
             'content': None,
             'relative_path': self.asset,
@@ -88,7 +87,5 @@ class FrontendToolsNode(template.Node):
 
         self.write_to_file(transformed)
         output = urljoin(settings.STATIC_URL, transformed['relative_path'])
-
-        # If caching: set cache
 
         return output

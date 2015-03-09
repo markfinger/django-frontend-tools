@@ -52,7 +52,6 @@ STATICFILES_FINDERS += (
 )
 
 COMPRESS_CSS_FILTERS = [
-    'compressor.filters.css_default.CssAbsoluteFilter',
     'django_frontend_tools.filters.CompressCSSFilter',
 ]
 

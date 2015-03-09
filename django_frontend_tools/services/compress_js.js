@@ -1,11 +1,13 @@
 var fs = require('fs');
 var UglifyJS = require('uglify-js');
 
-var service = function(req, res) {
-	var js = req.query.js;
+var service = function(data, response) {
+	console.log('in js service')
+	var js = data.js;
 
-	var options = req.query.options;
+	var options = data.options;
 	if (options) {
+		console.log(options)
 		options = JSON.parse(options);
 	} else {
 		options = {};
@@ -14,10 +16,10 @@ var service = function(req, res) {
 	if (js) {
 		options.fromString = true;
 	} else {
-		var pathToFile = req.query.path_to_file;
+		var pathToFile = data.path_to_file;
 		if (!fs.existsSync(pathToFile)) {
 			var message = 'The file specified by path_to_file, "' + pathToFile + '", cannot be found.';
-			res.status(500).send(message);
+			response.status(500).send(message);
 			console.error(new Error(message));
 			return;
 		}
@@ -27,12 +29,12 @@ var service = function(req, res) {
 	try {
 		var output = UglifyJS.minify(js, options).code;
 	} catch(err) {
-		res.status(500).send(err);
+		response.status(500).send(err);
 		console.error(new Error(err));
 		return;
 	}
 
-	res.send(output);
+	response.send(output);
 };
 
 module.exports = service;

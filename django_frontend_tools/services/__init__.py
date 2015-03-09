@@ -1,7 +1,9 @@
 import os
 import sys
 import json
+import hashlib
 from django.utils import six
+from django.conf import settings
 from django_node.base_service import BaseService
 from django_node.exceptions import NodeServiceError
 from ..exceptions import (
@@ -9,7 +11,13 @@ from ..exceptions import (
 )
 
 
-class AutoprefixerService(BaseService):
+class CachedService(BaseService):
+    def generate_cache_key(self, serialized_data, data):
+        if not settings.DEBUG:
+            return hashlib.sha256(serialized_data).hexdigest()
+
+
+class AutoprefixerService(CachedService):
     path_to_source = os.path.join(os.path.dirname(__file__), 'autoprefixer.js')
 
     def autoprefix(self, css, options=None):
@@ -28,7 +36,7 @@ class AutoprefixerService(BaseService):
         return response.text
 
 
-class LessService(BaseService):
+class LessService(CachedService):
     path_to_source = os.path.join(os.path.dirname(__file__), 'less.js')
 
     def compile(self, path_to_file, options=None):
@@ -47,10 +55,10 @@ class LessService(BaseService):
         return response.text
 
 
-class CompressCSSService(BaseService):
+class CompressCSSService(CachedService):
     path_to_source = os.path.join(os.path.dirname(__file__), 'compress_css.js')
 
-    def compress(self, css, path_to_file=None, options=None):
+    def compress(self, css, path_to_file=None, options=None, prepend_to_relative_urls=None):
         params = {}
 
         if css is not None:
@@ -63,6 +71,9 @@ class CompressCSSService(BaseService):
         if options is not None:
             params['options'] = json.dumps(options)
 
+        if prepend_to_relative_urls is not None:
+            params['prepend_to_relative_urls'] = prepend_to_relative_urls
+
         try:
             response = self.send(**params)
         except NodeServiceError as e:
@@ -71,7 +82,7 @@ class CompressCSSService(BaseService):
         return response.text
 
 
-class CompressJSService(BaseService):
+class CompressJSService(CachedService):
     path_to_source = os.path.join(os.path.dirname(__file__), 'compress_js.js')
 
     def compress(self, js, path_to_file=None, options=None):

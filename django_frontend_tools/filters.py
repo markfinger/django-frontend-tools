@@ -8,12 +8,11 @@ class CompressCSSFilter(FilterBase):
     def input(self, **kwargs):
         filename = kwargs.get('filename', None)
         if filename:
-            options = {}
+            prepend_to_relative_urls = None
             if kwargs.get('basename', None):
-                basedir = os.path.dirname(kwargs['basename'])
-                options['relativeTo'] = settings.STATIC_URL + basedir
-                options['target'] = (settings.COMPRESS_URL + settings.COMPRESS_OUTPUT_DIR + '/css/' + basedir)
-            return compress_css(path_to_file=filename, options=options)
+                # Rewrite relative urls to absolute urls
+                prepend_to_relative_urls = settings.STATIC_URL + os.path.dirname(kwargs['basename']) + '/'
+            return compress_css(path_to_file=filename, prepend_to_relative_urls=prepend_to_relative_urls)
         return compress_css(kwargs['elem']['text'])
 
     def output(self, **kwargs):
