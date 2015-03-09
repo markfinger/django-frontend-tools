@@ -1,0 +1,15 @@
+#foo {
+	background: url('foo/bar.png')
+}
+
+#bar {
+	background: url('./foo/bar.png')
+}
+
+#zoo {
+	background: url('/static/foo/bar.png')
+}
+
+#woo {
+	background: url('./../foo/bar.png')
+}

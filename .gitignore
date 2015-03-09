@@ -1,0 +1,4 @@
+node_modules
+*.pyc
+example/db.sqlite3
+tests/static_root
