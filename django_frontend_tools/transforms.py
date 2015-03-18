@@ -1,11 +1,7 @@
 import os
-from django_node import npm
 from .services import CompressCSSService, AutoprefixerService, LessService, CompressJSService
 from .utils import change_file_ext_to_css
 
-# Temp fix so that the services are only installed once
-# TODO: fix in django-node and backport
-npm.install(os.path.dirname(__file__))
 
 autoprefixer_service = AutoprefixerService()
 less_service = LessService()

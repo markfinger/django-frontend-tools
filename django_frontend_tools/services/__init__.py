@@ -4,12 +4,18 @@ import json
 import hashlib
 from django.utils import six
 from django.conf import settings
+from django_node import npm
 from django_node.base_service import BaseService
 from django_node.exceptions import NodeServiceError
 from ..settings import CACHE_AUTOPREFIXER, CACHE_LESS, CACHE_COMPRESSED_CSS, CACHE_COMPRESSED_JS
 from ..exceptions import (
     MissingArgumentError, AutoprefixerError, LessCompileError, CSSCompressionError, JSCompressionError
 )
+
+
+# Temp fix so that the services are only installed once
+# TODO: fix in django-node and backport
+npm.install(os.path.dirname(__file__))
 
 
 class CachedService(BaseService):
