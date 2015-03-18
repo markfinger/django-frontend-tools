@@ -1,6 +1,13 @@
 # django-frontend-tools
 
-Less/Autoprefixer compilation + CleanCSS/UglifyJS compression via django-compressor. Runs a node process in the background for some nice performance improvements.
+- Less
+- Autoprefixer
+- CleanCSS
+- UglifyJS
+
+Integrates with django-compressor for css/js compression.
+
+Runs a node process in the background for some nice performance improvements.
 
 This is an in-progress rewrite of some old gulp-based frontend tooling. It's reasonably well tested, but was built for a particular project's workflow, so it still needs a lot of love to make it more broadly useful.
 
