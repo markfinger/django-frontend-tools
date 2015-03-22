@@ -31,7 +31,7 @@ INSTALLED_APPS = (
 
 DJANGO_NODE = {
     'SERVICES': (
-        'django_frontend_tools',
+        'django_frontend_tools.services',
     ),
 }
 
